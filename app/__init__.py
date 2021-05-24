@@ -10,6 +10,9 @@ class HelloWord(Resource):
     def get(self):
         return {"dados":"Hello World "}
 
+    def post(self):
+        return {'data':'posted'}
+
 api.add_resource(HelloWord, '/helloworld_api')
 
 if __name__== "__main__":
