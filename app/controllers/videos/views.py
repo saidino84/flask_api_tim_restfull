@@ -1,4 +1,4 @@
-from flask import Blueprint,jsonify
+from flask import Blueprint,jsonify, render_template
 from app.models.videos import Video
 from app.models.serializer import videos_schema,video_schema
 
@@ -16,6 +16,10 @@ def get_all():
 
     return jsonify(videos_json)
 
+@videos_bp.route("/dashboard")
+def dashboard():
+    return render_template('dashboard.html')
+
 @videos_bp.route('/get_video_by_id/<id>')
 def get_video_by_id(id):
     try:
@@ -25,3 +29,7 @@ def get_video_by_id(id):
     except  Exception as e:
         return jsonify({'erro':"user_not_found"})
     return 'error'
+
+def configure_video_bp(app):
+    app.register_blueprint(videos_bp, url_prefix='/video')
+    print('Video blue_print configured sucess')

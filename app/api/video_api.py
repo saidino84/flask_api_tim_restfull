@@ -21,7 +21,7 @@ class Video(Resource):
         return Video.query.filter_by(id=video_id).first()
 
     def put(self,video_id):
-        # abort_if_video_exists(video_id)
+        abort_if_video_exists(video_id)
         return 'hello'
 
 

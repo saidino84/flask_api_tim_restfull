@@ -1,13 +1,13 @@
 from flask import Flask
 from app.db import configure_db
-# todo from flask_migrate import Migrate 
+from flask_migrate import Migrate 
 
 
 
 
 def create_app():
 
-    app=Flask(__name__)
+    app=Flask(__name__,template_folder='templates', static_folder='static')
     
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
     configure_db(app)
@@ -20,17 +20,25 @@ def create_app():
     configure_ma(app)
 
     # config db
-    #TODO Migrate(app,app.db)
+    Migrate(app,app.db)
 
-    from app.controllers.videos.views import videos_bp
+    from app.controllers.videos.views import configure_video_bp
     from app.api import create_api
 
     api=create_api(app)
 
-    app.register_blueprint(videos_bp, url_prefix='/videos')
+    # app.register_blueprint(videos_bp, url_prefix='/videos')
+
+    # todo CONFIGURANDO VIDEO API
+    configure_video_bp(app)
 
     
     from app.models.videos import Video
+    from app.models.image_file import ImageModel
+    from app.controllers.image_saver import  configure_img_bp
+
+
+    configure_img_bp(app)
     @app.shell_context_processor
     def make_shell_context():
         # com isto aki posso entrar no shell e fazer testes esporatico 
@@ -39,7 +47,7 @@ def create_app():
 
 
         '''
-        return dict(app=app,db=app.db, Video=Video)
+        return dict(app=app,db=app.db, Video=Video,Image=ImageModel)
     return app
 
 
