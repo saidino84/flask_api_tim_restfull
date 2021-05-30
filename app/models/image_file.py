@@ -22,4 +22,4 @@ class ImageModel(db.Model):
 
 
     def __repr__(self):
-        return f' Pic Name:{self.name} Date:{self.date} text:{self.text} created_ on {self.pic_date} location:{self.location}'
+        return f' Pic Name:{self.name} text:{self.text} created_ on {self.pic_date} location:{self.location}'

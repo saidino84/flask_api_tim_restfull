@@ -1,6 +1,7 @@
 from flask import Flask
 from app.db import configure_db
 from flask_migrate import Migrate 
+import os
 
 
 
@@ -8,6 +9,7 @@ from flask_migrate import Migrate
 def create_app():
 
     app=Flask(__name__,template_folder='templates', static_folder='static')
+    app.secret_key=os.urandom(23)
     
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
     configure_db(app)

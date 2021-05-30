@@ -5,8 +5,9 @@ from io import BytesIO #convert data from Database into bytes
 
 from app.db import db
 from datetime import datetime
-from flask import Blueprint,request, render_template
+from flask import Blueprint,request, render_template, flash,redirect, url_for
 from app.models.image_file import ImageModel
+from werkzeug.utils import secure_filename
 
 img_bp=Blueprint('image',__name__, static_folder='static',template_folder='templates',)
 
@@ -17,32 +18,49 @@ def render_picture(data):
     """
     render_pic =base64.b64encode(data).decode('ascii')
     return render_pic
+def read_image(data):
+    read=base64.b64decode(data)
 
+    with open('image.png','w') as i:
+        i.write(read)
+    return i 
 
 @img_bp.route("/index", methods=['GET', 'POST'])
 @img_bp.route('/')
 def index():
     '# Index It routes to index.html where the upload forms is '
-    return render_template('index.html')
+    flash(u'Well come !',category='error')
+
+    _images=ImageModel.query.all()
+    image=_images[0]
+    # img=read_image(image.rendered_data)
+
+    return render_template('index.html', images=_images, base64=base64)
+@img_bp.route('/render')
+def render():
+    return render_template('upload.html')
 
 @img_bp.route('/upload', methods=['POST','GET'] )
 def upload():
     'route of uploader...'
     file =request.files['inputFile']
     data = file.read()
-    print(data)
-    return {'dados':data}
+    # print(data)
+    # flash(f'File name :{file.filename}')
+    # return redirect(request.url)
+
     render_file =render_picture(data)
     text = request.form['text']
 
     location =request.form['location']
+    
 
-    new_file=ImageFile(name=file.file_name, data=data,render_data=render_file, text=text, location=location)
+    new_file=ImageModel(name=secure_filename(file.filename), data=data,rendered_data=render_file, text=text, location=location)
     db.session.add(new_file)
     db.session.commit()
 
-    flash(f'Pic {new_file.name}  Uploaded Text: {new_file.text}  LOcation:{new_file.locatiom}')
-    return render_template('upload.html')
+    flash(f'Pic {new_file.name}  Uploaded Text: {new_file.text}  LOcation:{new_file.location}')
+    return render_template('index.html')
 
 
 def configure_img_bp(app):
