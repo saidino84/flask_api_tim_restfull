@@ -1,3 +1,4 @@
 {
-    "python.pythonPath": "app/__init__.py"
+    "python.pythonPath": "app/__init__.py",
+    "git.ignoreLimitWarning": true
 }
