@@ -5,9 +5,11 @@ from io import BytesIO #convert data from Database into bytes
 
 from app.db import db
 from datetime import datetime
-from flask import Blueprint,request, render_template, flash,redirect, url_for
+from flask import Blueprint,request, render_template, flash,redirect, url_for,jsonify
 from app.models.image_file import ImageModel
 from werkzeug.utils import secure_filename
+
+from app.models.serializer import images_schema
 
 img_bp=Blueprint('image',__name__, static_folder='static',template_folder='templates',)
 
@@ -25,6 +27,8 @@ def read_image(data):
         i.write(read)
     return i 
 
+
+
 @img_bp.route("/index", methods=['GET', 'POST'])
 @img_bp.route('/')
 def index():
@@ -32,8 +36,13 @@ def index():
     flash(u'Well come !',category='error')
 
     _images=ImageModel.query.all()
-    image=_images[0]
+    # image=_images[0]
     # img=read_image(image.rendered_data)
+    arquivo=url_for('static',filename='arquivo.txt')
+    with open(arquivo, 'r+') as file:
+        print(file.read())
+        from time import sleep
+        sleep(2)
 
     return render_template('index.html', images=_images, base64=base64)
 @img_bp.route('/render')
@@ -61,6 +70,15 @@ def upload():
 
     flash(f'Pic {new_file.name}  Uploaded Text: {new_file.text}  LOcation:{new_file.location}')
     return render_template('index.html')
+
+@img_bp.route('/get_image_api',methods=['GET', ])
+def get_images_api():
+    images =ImageModel.query.all()
+    return jsonify(images_schema.dump(images))
+
+@img_bp.route('/test')
+def test():
+    return jsonify({'nome':'saidino'});
 
 
 def configure_img_bp(app):

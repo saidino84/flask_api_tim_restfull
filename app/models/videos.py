@@ -2,7 +2,7 @@ from app.db import db
 
 
 
-class Video(db.Model):
+class Videos(db.Model):
     id=db.Column(db.Integer, primary_key=True,autoincrement=True)
     name=db.Column(db.String(200), nullable=False)
     views=db.Column(db.Integer, nullable=False)

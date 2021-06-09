@@ -1,0 +1,1 @@
+[{"stmt":"SELECT * FROM video;","header":["id","name","views","likes","image"],"rows":[["1","youtube","0","0","NULL"],["2","estudar banco de dados","0","23","NULL"]]}]

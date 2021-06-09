@@ -4,6 +4,7 @@ import base64
 from io import BytesIO #convert data from Database into bytes
 
 
+
 from app.db import db
 from datetime import datetime
 
@@ -23,3 +24,13 @@ class ImageModel(db.Model):
 
     def __repr__(self):
         return f' Pic Name:{self.name} text:{self.text} created_ on {self.pic_date} location:{self.location}'
+
+
+class ImageTeste(db.Model):
+    '''
+    TODO esta é aclasse de Image por teste apenas
+    '''
+    id = db.Column(db.Integer, primary_key=True)
+    img = db.Column(db.Text, nullable=False)
+    name = db.Column(db.Text,nullable=False)
+    mime_type = db.Column(db.Text, nullable=False)

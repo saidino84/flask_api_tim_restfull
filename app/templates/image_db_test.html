@@ -1,0 +1,67 @@
+{% extends 'base.html' %}}
+ 
+ 
+{% block title %}Save File to db{%endblock%}
+
+
+{% block content %}
+
+ 
+ <h2 class="title">IMage Test bd</h2>
+
+   <form method="POST" action="/img_test/upload" enctype="multipart/form-data" method="POST">
+       <!-- File Upload-->
+       <div class="form-group">
+           <label for="inputFile">File input</label>
+           <input class="form-control-file" type="file" name="pic">
+       </div>
+
+       <!-- Location -->
+       <div class="form-group">
+           <label for="location">Location</label>
+           <input class="form-control" type="text" name="location">
+       </div>
+
+       <!-- Text -->
+       <div class="form-group">
+           <label for="text">Write Text</label>
+           <textarea class="form-control" name="text" id="text" rows="5" placeholder="Add a Description"></textarea>
+       <br/>
+        
+       <input type="submit" class="form-control  btn btn-primary" value="Save in db" name="btnsaver">
+       {% if imgaes%}
+             <p>No Image In db</p>
+             {%else%}
+
+       <div class="row">
+        <div class="col-xs-12">
+             
+        </div>
+        <div class="col-xs-12">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nome</th>
+                    <th>formato</th>
+                     
+                </tr>
+                </thead>
+                <tbody>
+                {% for image in images%}
+                <tr>
+                    <td>{{image.id}}</td>
+                    <td>{{image.name}}</td>
+                    <td>{{image.mime_type}}</td>
+                   
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {%endif%}
+    
+{% endblock %}
+
+ 
